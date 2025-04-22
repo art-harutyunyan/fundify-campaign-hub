@@ -13,7 +13,7 @@
     --popover: 0 0% 100%;
     --popover-foreground: 222.2 84% 4.9%;
 
-    --primary: 222.2 47.4% 11.2%;
+    --primary: 265 89% 78%;
     --primary-foreground: 210 40% 98%;
 
     --secondary: 210 40% 96.1%;
@@ -22,7 +22,7 @@
     --muted: 210 40% 96.1%;
     --muted-foreground: 215.4 16.3% 46.9%;
 
-    --accent: 210 40% 96.1%;
+    --accent: 265 89% 88%;
     --accent-foreground: 222.2 47.4% 11.2%;
 
     --destructive: 0 84.2% 60.2%;
@@ -30,7 +30,7 @@
 
     --border: 214.3 31.8% 91.4%;
     --input: 214.3 31.8% 91.4%;
-    --ring: 222.2 84% 4.9%;
+    --ring: 265 89% 78%;
 
     --radius: 0.5rem;
 
@@ -38,7 +38,7 @@
 
     --sidebar-foreground: 240 5.3% 26.1%;
 
-    --sidebar-primary: 240 5.9% 10%;
+    --sidebar-primary: 265 89% 78%;
 
     --sidebar-primary-foreground: 0 0% 98%;
 
@@ -48,7 +48,7 @@
 
     --sidebar-border: 220 13% 91%;
 
-    --sidebar-ring: 217.2 91.2% 59.8%;
+    --sidebar-ring: 265 89% 78%;
   }
 
   .dark {
@@ -96,6 +96,36 @@
   }
 
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground font-sans;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-heading;
+  }
+}
+
+@layer utilities {
+  .card-hover {
+    @apply transition-all duration-200 hover:shadow-lg hover:-translate-y-1;
+  }
+
+  .gradient-purple {
+    @apply bg-gradient-to-r from-purple-500 to-purple-700 text-white;
+  }
+
+  .gradient-purple-light {
+    @apply bg-gradient-to-r from-purple-400 to-purple-600 text-white;
+  }
+  
+  .section-padding {
+    @apply py-12 px-4 sm:px-6 md:py-16 md:px-8;
+  }
+
+  .campaign-progress {
+    @apply h-2 rounded-full bg-gray-200 overflow-hidden;
+  }
+
+  .campaign-progress-bar {
+    @apply h-full bg-gradient-to-r from-purple-500 to-purple-700;
   }
 }
