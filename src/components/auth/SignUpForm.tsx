@@ -6,7 +6,8 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { useNavigate } from "react-router-dom";
-import { Loader2 } from "lucide-react";
+import { Loader2, AlertCircle } from "lucide-react";
+import { Alert, AlertDescription } from "@/components/ui/alert";
 
 const SignUpForm = () => {
   const [fullName, setFullName] = useState("");
@@ -14,6 +15,7 @@ const SignUpForm = () => {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [passwordError, setPasswordError] = useState("");
+  const [signupError, setSignupError] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { signUp } = useAuth();
   const navigate = useNavigate();
@@ -41,12 +43,18 @@ const SignUpForm = () => {
     }
     
     setIsSubmitting(true);
+    setSignupError("");
     
     try {
       await signUp({ email, password, fullName });
       navigate("/login"); // Redirect to login page after signup
     } catch (error) {
       console.error("Signup error:", error);
+      if (window.location.hostname.includes('lovableproject.com')) {
+        setSignupError("This is a development environment using placeholder Supabase credentials. Please set up real Supabase credentials to enable account creation.");
+      } else {
+        setSignupError("Failed to create account. Please try again later.");
+      }
     } finally {
       setIsSubmitting(false);
     }
@@ -62,6 +70,12 @@ const SignUpForm = () => {
       </CardHeader>
       <form onSubmit={handleSubmit}>
         <CardContent className="space-y-4">
+          {signupError && (
+            <Alert variant="destructive">
+              <AlertCircle className="h-4 w-4" />
+              <AlertDescription>{signupError}</AlertDescription>
+            </Alert>
+          )}
           <div className="space-y-2">
             <Label htmlFor="fullName">Full Name</Label>
             <Input
