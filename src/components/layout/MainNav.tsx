@@ -1,8 +1,19 @@
 
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
+import { useAuth } from "@/hooks/useAuth";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { UserCircle } from "lucide-react";
 
 export function MainNav() {
+  const { user, signOut } = useAuth();
+
   return (
     <header className="sticky top-0 z-30 w-full border-b bg-background">
       <div className="container flex h-16 items-center justify-between">
@@ -23,11 +34,44 @@ export function MainNav() {
           </nav>
         </div>
         <div className="flex items-center gap-4">
+          {user ? (
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="outline" size="sm" className="rounded-full">
+                  <UserCircle className="h-5 w-5 mr-2" />
+                  <span className="max-w-[100px] truncate">
+                    {user.user_metadata?.full_name || user.email}
+                  </span>
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end">
+                <DropdownMenuItem asChild>
+                  <Link to="/profile">My Profile</Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link to="/donations">My Donations</Link>
+                </DropdownMenuItem>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem
+                  className="text-red-600 cursor-pointer"
+                  onClick={() => signOut()}
+                >
+                  Sign Out
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          ) : (
+            <>
+              <Button asChild variant="ghost">
+                <Link to="/login">Sign In</Link>
+              </Button>
+              <Button asChild>
+                <Link to="/signup">Sign Up</Link>
+              </Button>
+            </>
+          )}
           <Button asChild variant="ghost">
             <Link to="/admin">Admin Dashboard</Link>
-          </Button>
-          <Button asChild>
-            <Link to="/campaigns/new">Start a Campaign</Link>
           </Button>
         </div>
       </div>
