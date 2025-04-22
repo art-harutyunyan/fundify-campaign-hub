@@ -19,13 +19,14 @@ export function useIsAdmin(): boolean | null {
     let cancelled = false;
     // Supabase auth user id is a string (uuid); your userAccount.user_id is a bigint → string, so must match types
     supabase
-      .from("useerAccount")
+      .from("userAccount")
       .select("is_admin")
       .eq("email", user.email)
       .maybeSingle()
       .then(({ data, error }) => {
         if (cancelled) return;
         if (error) {
+          console.error("Error checking admin status:", error);
           setIsAdmin(false);
         } else {
           setIsAdmin(!!data && data.is_admin === 1);
