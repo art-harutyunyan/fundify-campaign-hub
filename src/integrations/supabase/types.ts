@@ -15,6 +15,7 @@ export type Database = {
           email: string | null
           firstName: string | null
           id: number
+          is_admin: number | null
           lastName: string | null
           password: string | null
           user_id: number | null
@@ -25,6 +26,7 @@ export type Database = {
           email?: string | null
           firstName?: string | null
           id?: number
+          is_admin?: number | null
           lastName?: string | null
           password?: string | null
           user_id?: number | null
@@ -35,6 +37,7 @@ export type Database = {
           email?: string | null
           firstName?: string | null
           id?: number
+          is_admin?: number | null
           lastName?: string | null
           password?: string | null
           user_id?: number | null

@@ -10,9 +10,11 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { UserCircle } from "lucide-react";
+import { useIsAdmin } from "@/hooks/useIsAdmin";
 
 export function MainNav() {
   const { user, signOut } = useAuth();
+  const isAdmin = useIsAdmin();
 
   return (
     <header className="sticky top-0 z-30 w-full border-b bg-background">
@@ -70,9 +72,12 @@ export function MainNav() {
               </Button>
             </>
           )}
-          <Button asChild variant="ghost">
-            <Link to="/admin">Admin Dashboard</Link>
-          </Button>
+          {/* Only show for admins */}
+          {isAdmin ? (
+            <Button asChild variant="ghost">
+              <Link to="/admin">Admin Dashboard</Link>
+            </Button>
+          ) : null}
         </div>
       </div>
     </header>
