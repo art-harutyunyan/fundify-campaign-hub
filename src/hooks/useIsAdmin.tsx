@@ -4,7 +4,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 
 /**
- * Returns true if the logged in user is an admin according to the userAccount table.
+ * Returns true if the logged in user is an admin according to the useerAccount table.
  */
 export function useIsAdmin(): boolean | null {
   const { user, loading } = useAuth();
@@ -17,9 +17,9 @@ export function useIsAdmin(): boolean | null {
     }
 
     let cancelled = false;
-    // Supabase auth user id is a string (uuid); your userAccount.user_id is a bigint → string, so must match types
+    // Make sure to use the proper table name: useerAccount
     supabase
-      .from("userAccount")
+      .from("useerAccount")
       .select("is_admin")
       .eq("email", user.email)
       .maybeSingle()
