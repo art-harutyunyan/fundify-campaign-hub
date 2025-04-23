@@ -9,7 +9,7 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
-      useerAccount: {
+      userAccount: {
         Row: {
           created_at: string
           email: string | null
