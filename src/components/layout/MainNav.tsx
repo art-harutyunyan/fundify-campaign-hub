@@ -16,8 +16,9 @@ export function MainNav() {
   const { user, signOut } = useAuth();
   const isAdmin = useIsAdmin();
   
-  // Debug log to see admin status in UI
-  console.log("Is admin in MainNav:", isAdmin);
+  // Debug logs to see user and admin status in UI
+  console.log("Current user in MainNav:", user?.id, user?.email);
+  console.log("Is admin in MainNav:", isAdmin, "type:", typeof isAdmin);
 
   return (
     <header className="sticky top-0 z-30 w-full border-b bg-background">
