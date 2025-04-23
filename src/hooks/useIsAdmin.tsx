@@ -1,6 +1,6 @@
 
 import { useState, useEffect } from "react";
-import { supabase } from "@/integrations/supabase/client";
+import { supabase } from "@/lib/supabase";
 import { useAuth } from "@/hooks/useAuth";
 
 /**
@@ -18,6 +18,9 @@ export function useIsAdmin(): boolean | null {
 
     let cancelled = false;
     
+    // Log to debug
+    console.log("Checking admin status for:", user.email);
+    
     supabase
       .from("userAccount")
       .select("is_admin")
@@ -25,12 +28,18 @@ export function useIsAdmin(): boolean | null {
       .maybeSingle()
       .then(({ data, error }) => {
         if (cancelled) return;
+        
         if (error) {
           console.error("Error checking admin status:", error);
           setIsAdmin(false);
-        } else {
-          setIsAdmin(!!data && data.is_admin === 1);
+          return;
         }
+        
+        // Debug log to see what data is returned
+        console.log("Admin status data:", data);
+        
+        // In Supabase, numeric 1 is often returned as a number
+        setIsAdmin(!!data && data.is_admin === 1);
       });
 
     return () => {

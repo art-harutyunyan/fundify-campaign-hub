@@ -15,6 +15,9 @@ import { useIsAdmin } from "@/hooks/useIsAdmin";
 export function MainNav() {
   const { user, signOut } = useAuth();
   const isAdmin = useIsAdmin();
+  
+  // Debug log to see admin status in UI
+  console.log("Is admin in MainNav:", isAdmin);
 
   return (
     <header className="sticky top-0 z-30 w-full border-b bg-background">
@@ -37,31 +40,40 @@ export function MainNav() {
         </div>
         <div className="flex items-center gap-4">
           {user ? (
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button variant="outline" size="sm" className="rounded-full">
-                  <UserCircle className="h-5 w-5 mr-2" />
-                  <span className="max-w-[100px] truncate">
-                    {user.user_metadata?.full_name || user.email}
-                  </span>
+            <>
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="outline" size="sm" className="rounded-full">
+                    <UserCircle className="h-5 w-5 mr-2" />
+                    <span className="max-w-[100px] truncate">
+                      {user.user_metadata?.full_name || user.email}
+                    </span>
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end">
+                  <DropdownMenuItem asChild>
+                    <Link to="/profile">My Profile</Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem asChild>
+                    <Link to="/donations">My Donations</Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem
+                    className="text-red-600 cursor-pointer"
+                    onClick={() => signOut()}
+                  >
+                    Sign Out
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+              
+              {/* Show Admin Dashboard button for admin users */}
+              {isAdmin === true && (
+                <Button asChild variant="default">
+                  <Link to="/admin">Admin Dashboard</Link>
                 </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end">
-                <DropdownMenuItem asChild>
-                  <Link to="/profile">My Profile</Link>
-                </DropdownMenuItem>
-                <DropdownMenuItem asChild>
-                  <Link to="/donations">My Donations</Link>
-                </DropdownMenuItem>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem
-                  className="text-red-600 cursor-pointer"
-                  onClick={() => signOut()}
-                >
-                  Sign Out
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
+              )}
+            </>
           ) : (
             <>
               <Button asChild variant="ghost">
@@ -72,12 +84,6 @@ export function MainNav() {
               </Button>
             </>
           )}
-          {/* Only show for admins */}
-          {isAdmin ? (
-            <Button asChild variant="ghost">
-              <Link to="/admin">Admin Dashboard</Link>
-            </Button>
-          ) : null}
         </div>
       </div>
     </header>
