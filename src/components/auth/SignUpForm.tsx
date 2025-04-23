@@ -48,10 +48,10 @@ const SignUpForm = () => {
     try {
       await signUp({ email, password, fullName });
       navigate("/login"); // Redirect to login page after signup
-    } catch (error) {
+    } catch (error: any) {
       console.error("Signup error:", error);
-      if (window.location.hostname.includes('lovableproject.com')) {
-        setSignupError("This is a development environment using placeholder Supabase credentials. Please set up real Supabase credentials to enable account creation.");
+      if (error?.message) {
+        setSignupError(error.message);
       } else {
         setSignupError("Failed to create account. Please try again later.");
       }

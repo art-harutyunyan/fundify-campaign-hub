@@ -1,8 +1,17 @@
 
 import { useState, useEffect, createContext, useContext, ReactNode } from 'react';
-import { supabase, UserCredentials, SignUpCredentials } from '@/lib/supabase';
+import { supabase } from '@/integrations/supabase/client';
 import { User, Session } from '@supabase/supabase-js';
 import { useToast } from '@/components/ui/use-toast';
+
+type UserCredentials = {
+  email: string;
+  password: string;
+};
+
+type SignUpCredentials = UserCredentials & {
+  fullName?: string;
+};
 
 type AuthContextType = {
   user: User | null;
