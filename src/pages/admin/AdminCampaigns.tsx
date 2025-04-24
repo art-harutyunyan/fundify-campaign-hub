@@ -1,4 +1,3 @@
-
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { AdminLayout } from "@/components/layout/AdminLayout";
@@ -9,15 +8,31 @@ import { Campaign } from "@/types/campaign";
 import { useCampaigns } from "@/hooks/useCampaigns";
 
 const AdminCampaigns = () => {
-  const { getCampaigns, loading } = useCampaigns();
+  const { getCampaigns } = useCampaigns();
   const [campaigns, setCampaigns] = useState<Campaign[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
+  // This function will be used for fetching campaigns, keeping it outside useEffect
+  // to avoid recreation on each render
+  const fetchCampaigns = async () => {
+    try {
+      setIsLoading(true);
+      const data = await getCampaigns();
+      setCampaigns(data);
+      setIsLoading(false);
+    } catch (err) {
+      console.error("Error fetching campaigns:", err);
+      setError("Failed to load campaigns. Please try again.");
+      setIsLoading(false);
+    }
+  };
+
   useEffect(() => {
     let isMounted = true;
-
-    const fetchCampaigns = async () => {
+    
+    // Using an IIFE to avoid creating a separate function
+    (async () => {
       try {
         setIsLoading(true);
         const data = await getCampaigns();
@@ -33,14 +48,12 @@ const AdminCampaigns = () => {
           setIsLoading(false);
         }
       }
-    };
-    
-    fetchCampaigns();
+    })();
     
     return () => {
       isMounted = false;
     };
-  }, [getCampaigns]);
+  }, []); // Empty dependency array to ensure it only runs once on mount
   
   const getStatusBadgeClass = (status: string) => {
     switch (status) {
@@ -78,18 +91,7 @@ const AdminCampaigns = () => {
               <div className="text-center py-8 text-red-500">
                 <p>{error}</p>
                 <Button 
-                  onClick={() => {
-                    setError(null);
-                    setIsLoading(true);
-                    getCampaigns().then(data => {
-                      setCampaigns(data);
-                      setIsLoading(false);
-                    }).catch(err => {
-                      console.error("Error reloading campaigns:", err);
-                      setError("Failed to load campaigns. Please try again.");
-                      setIsLoading(false);
-                    });
-                  }}
+                  onClick={fetchCampaigns}
                   className="mt-4"
                 >
                   Try Again
