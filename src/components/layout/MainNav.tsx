@@ -9,7 +9,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { UserCircle, Eye, EyeOff } from "lucide-react";
+import { UserCircle } from "lucide-react";
 import { useIsAdmin } from "@/hooks/useIsAdmin";
 
 export function MainNav() {
@@ -66,9 +66,9 @@ export function MainNav() {
                 </DropdownMenuContent>
               </DropdownMenu>
               
-              {/* Show Admin Dashboard button for admin users */}
+              {/* Show Admin Dashboard button for admin users - explicitly check for true */}
               {isAdmin === true && (
-                <Button asChild variant="default">
+                <Button asChild variant="default" className="bg-blue-600 hover:bg-blue-700">
                   <Link to="/admin">Admin Dashboard</Link>
                 </Button>
               )}
