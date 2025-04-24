@@ -11,14 +11,35 @@ import { useCampaigns } from "@/hooks/useCampaigns";
 const AdminCampaigns = () => {
   const { getCampaigns, loading } = useCampaigns();
   const [campaigns, setCampaigns] = useState<Campaign[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
+    let isMounted = true;
+
     const fetchCampaigns = async () => {
-      const data = await getCampaigns();
-      setCampaigns(data);
+      try {
+        setIsLoading(true);
+        const data = await getCampaigns();
+        
+        if (isMounted) {
+          setCampaigns(data);
+          setIsLoading(false);
+        }
+      } catch (err) {
+        if (isMounted) {
+          console.error("Error fetching campaigns:", err);
+          setError("Failed to load campaigns. Please try again.");
+          setIsLoading(false);
+        }
+      }
     };
     
     fetchCampaigns();
+    
+    return () => {
+      isMounted = false;
+    };
   }, [getCampaigns]);
   
   const getStatusBadgeClass = (status: string) => {
@@ -51,8 +72,29 @@ const AdminCampaigns = () => {
             <CardTitle>All Campaigns</CardTitle>
           </CardHeader>
           <CardContent>
-            {loading ? (
+            {isLoading ? (
               <div className="text-center py-8">Loading campaigns...</div>
+            ) : error ? (
+              <div className="text-center py-8 text-red-500">
+                <p>{error}</p>
+                <Button 
+                  onClick={() => {
+                    setError(null);
+                    setIsLoading(true);
+                    getCampaigns().then(data => {
+                      setCampaigns(data);
+                      setIsLoading(false);
+                    }).catch(err => {
+                      console.error("Error reloading campaigns:", err);
+                      setError("Failed to load campaigns. Please try again.");
+                      setIsLoading(false);
+                    });
+                  }}
+                  className="mt-4"
+                >
+                  Try Again
+                </Button>
+              </div>
             ) : campaigns.length > 0 ? (
               <Table>
                 <TableHeader>

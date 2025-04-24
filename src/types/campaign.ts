@@ -16,5 +16,5 @@ export interface Campaign {
   created_by: string;
   created_at?: string;
   updated_at?: string;
-  status: 'draft' | 'active' | 'completed' | 'cancelled';
+  status: 'draft' | 'active' | 'completed' | 'cancelled' | string;
 }

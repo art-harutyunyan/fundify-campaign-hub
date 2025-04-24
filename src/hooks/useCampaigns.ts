@@ -47,7 +47,7 @@ export function useCampaigns() {
         description: 'Your campaign has been created successfully.'
       });
       
-      return data;
+      return data as Campaign;
     } catch (error) {
       console.error('Error creating campaign:', error);
       toast({
@@ -81,7 +81,7 @@ export function useCampaigns() {
         return [];
       }
       
-      return data || [];
+      return data as Campaign[] || [];
     } catch (error) {
       console.error('Error fetching campaigns:', error);
       return [];
@@ -106,7 +106,7 @@ export function useCampaigns() {
         return null;
       }
       
-      return data;
+      return data as Campaign;
     } catch (error) {
       console.error('Error fetching campaign:', error);
       return null;
