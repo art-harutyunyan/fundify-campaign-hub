@@ -1,5 +1,6 @@
 
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { AdminLayout } from "@/components/layout/AdminLayout";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -13,8 +14,14 @@ import { format } from "date-fns";
 import { cn } from "@/lib/utils";
 import { CalendarIcon, Upload } from "lucide-react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { useAuth } from "@/hooks/useAuth";
+import { useCampaigns } from "@/hooks/useCampaigns";
 
 const CreateCampaignForm = () => {
+  const { user } = useAuth();
+  const { createCampaign, loading } = useCampaigns();
+  const navigate = useNavigate();
+
   const [campaignName, setCampaignName] = useState("");
   const [campaignTitle, setCampaignTitle] = useState("");
   const [campaignSubtitle, setCampaignSubtitle] = useState("");
@@ -28,23 +35,40 @@ const CreateCampaignForm = () => {
   const [bannerImage, setBannerImage] = useState<File | null>(null);
   const [featuredImage, setFeaturedImage] = useState<File | null>(null);
   
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Here you would process the form data and create the campaign
-    console.log({
-      campaignName,
-      campaignTitle,
-      campaignSubtitle,
-      campaignMessage,
-      campaignCurrency,
-      isUnlimitedGoal,
-      campaignGoal: isUnlimitedGoal ? "Unlimited" : campaignGoal,
-      isNeverEnding,
-      startDate,
-      endDate: isNeverEnding ? null : endDate,
-      bannerImage: bannerImage?.name,
-      featuredImage: featuredImage?.name
-    });
+    
+    if (!user?.id) {
+      console.error("User not logged in");
+      return;
+    }
+    
+    try {
+      const campaignData = {
+        name: campaignName,
+        title: campaignTitle,
+        subtitle: campaignSubtitle,
+        message: campaignMessage,
+        currency: campaignCurrency,
+        is_unlimited_goal: isUnlimitedGoal,
+        goal_amount: isUnlimitedGoal ? undefined : Number(campaignGoal),
+        is_never_ending: isNeverEnding,
+        start_date: startDate ? startDate.toISOString() : new Date().toISOString(),
+        end_date: isNeverEnding || !endDate ? undefined : endDate.toISOString(),
+        banner_image_url: bannerImage ? URL.createObjectURL(bannerImage) : undefined,
+        featured_image_url: featuredImage ? URL.createObjectURL(featuredImage) : undefined,
+        created_by: user.id,
+        status: 'draft'
+      };
+      
+      const newCampaign = await createCampaign(campaignData);
+      
+      if (newCampaign) {
+        navigate('/admin/campaigns');
+      }
+    } catch (error) {
+      console.error("Error creating campaign:", error);
+    }
   };
   
   const currencies = [
@@ -269,11 +293,15 @@ const CreateCampaignForm = () => {
               </div>
               
               <div className="flex justify-end gap-4">
-                <Button type="button" variant="outline">
+                <Button 
+                  type="button" 
+                  variant="outline" 
+                  onClick={() => navigate('/admin/campaigns')}
+                >
                   Cancel
                 </Button>
-                <Button type="submit">
-                  Create Campaign
+                <Button type="submit" disabled={loading}>
+                  {loading ? "Creating..." : "Create Campaign"}
                 </Button>
               </div>
             </form>

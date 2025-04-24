@@ -3,8 +3,10 @@ import { useEffect, useState } from "react";
 import { MainLayout } from "@/components/layout/MainLayout";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
 import { useAuth } from "@/hooks/useAuth";
 import { supabase } from "@/integrations/supabase/client";
+import { useNavigate, Link } from "react-router-dom";
 
 type Donation = {
   id: string;
@@ -25,8 +27,15 @@ const ProfilePage = () => {
   const [donations, setDonations] = useState<Donation[]>([]);
   const [campaigns, setCampaigns] = useState<Campaign[]>([]);
   const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
 
   useEffect(() => {
+    // Redirect if not logged in
+    if (!user) {
+      navigate("/login");
+      return;
+    }
+    
     // This would be replaced with actual data fetching logic
     // For now we're just using mock data
     const mockDonations = [
@@ -43,12 +52,22 @@ const ProfilePage = () => {
     setDonations(mockDonations);
     setCampaigns(mockCampaigns);
     setLoading(false);
-  }, [user]);
+  }, [user, navigate]);
+
+  // If user is not logged in, don't render the profile page
+  if (!user) {
+    return null;
+  }
 
   return (
     <MainLayout>
       <div className="container py-8">
-        <h1 className="text-3xl font-bold mb-8">My Profile</h1>
+        <div className="flex justify-between items-center mb-8">
+          <h1 className="text-3xl font-bold">My Profile</h1>
+          <Button asChild>
+            <Link to="/profile/edit">Edit Profile</Link>
+          </Button>
+        </div>
 
         <Tabs defaultValue="campaigns">
           <TabsList className="mb-6">

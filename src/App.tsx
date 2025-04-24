@@ -12,10 +12,14 @@ import CampaignForm from "./pages/CampaignForm";
 import AdminDashboard from "./pages/admin/AdminDashboard";
 import AdminCampaigns from "./pages/admin/AdminCampaigns";
 import CreateCampaignForm from "./pages/admin/CreateCampaignForm";
+import AdminAnalytics from "./pages/admin/AdminAnalytics";
+import AdminUsers from "./pages/admin/AdminUsers";
+import AdminSettings from "./pages/admin/AdminSettings";
 import Login from "./pages/auth/Login";
 import SignUp from "./pages/auth/SignUp";
 import ForgotPassword from "./pages/auth/ForgotPassword";
 import ProfilePage from "./pages/ProfilePage";
+import EditProfilePage from "./pages/EditProfilePage";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -39,11 +43,15 @@ const App = () => (
             <Route path="/signup" element={<SignUp />} />
             <Route path="/forgot-password" element={<ForgotPassword />} />
             <Route path="/profile" element={<ProfilePage />} />
+            <Route path="/profile/edit" element={<EditProfilePage />} />
             
             {/* Admin Routes */}
             <Route path="/admin" element={<AdminDashboard />} />
             <Route path="/admin/campaigns" element={<AdminCampaigns />} />
             <Route path="/admin/campaigns/create" element={<CreateCampaignForm />} />
+            <Route path="/admin/analytics" element={<AdminAnalytics />} />
+            <Route path="/admin/users" element={<AdminUsers />} />
+            <Route path="/admin/settings" element={<AdminSettings />} />
             
             {/* Catch-all route */}
             <Route path="*" element={<NotFound />} />

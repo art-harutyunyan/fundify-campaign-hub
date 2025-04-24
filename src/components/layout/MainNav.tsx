@@ -1,5 +1,5 @@
 
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/hooks/useAuth";
 import {
@@ -15,10 +15,17 @@ import { useIsAdmin } from "@/hooks/useIsAdmin";
 export function MainNav() {
   const { user, signOut } = useAuth();
   const isAdmin = useIsAdmin();
+  const navigate = useNavigate();
   
   // Debug logs to see user and admin status in UI
   console.log("Current user in MainNav:", user?.id, user?.email);
   console.log("Is admin in MainNav:", isAdmin, "type:", typeof isAdmin);
+
+  const handleSignOut = async () => {
+    await signOut();
+    // Redirect to home page after sign out
+    navigate("/");
+  };
 
   return (
     <header className="sticky top-0 z-30 w-full border-b bg-background">
@@ -47,8 +54,8 @@ export function MainNav() {
                 <DropdownMenuTrigger asChild>
                   <Button variant="outline" size="sm" className="rounded-full">
                     <UserCircle className="h-5 w-5 mr-2" />
-                    <span className="max-w-[150px] truncate">
-                      {user.user_metadata?.full_name || user.email}
+                    <span className="max-w-[120px] truncate">
+                      {user.user_metadata?.full_name || user.email?.split('@')[0] || 'User'}
                     </span>
                   </Button>
                 </DropdownMenuTrigger>
@@ -56,10 +63,13 @@ export function MainNav() {
                   <DropdownMenuItem asChild>
                     <Link to="/profile">My Profile</Link>
                   </DropdownMenuItem>
+                  <DropdownMenuItem asChild>
+                    <Link to="/profile/edit">Edit Profile</Link>
+                  </DropdownMenuItem>
                   <DropdownMenuSeparator />
                   <DropdownMenuItem
                     className="text-red-600 cursor-pointer"
-                    onClick={() => signOut()}
+                    onClick={handleSignOut}
                   >
                     Sign Out
                   </DropdownMenuItem>

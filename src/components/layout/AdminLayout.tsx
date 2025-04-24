@@ -1,6 +1,6 @@
 
 import { ReactNode } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { 
   BarChart, 
@@ -9,6 +9,7 @@ import {
   Settings, 
   Users 
 } from "lucide-react";
+import { useAuth } from "@/hooks/useAuth";
 
 interface AdminLayoutProps {
   children: ReactNode;
@@ -16,6 +17,14 @@ interface AdminLayoutProps {
 
 export function AdminLayout({ children }: AdminLayoutProps) {
   const location = useLocation();
+  const navigate = useNavigate();
+  const { user } = useAuth();
+  
+  // Redirect if not logged in
+  if (!user) {
+    navigate("/login");
+    return null;
+  }
   
   const navItems = [
     {
@@ -50,7 +59,8 @@ export function AdminLayout({ children }: AdminLayoutProps) {
       <aside className="w-64 border-r bg-gray-50 hidden md:block">
         <div className="flex h-16 items-center border-b px-6">
           <Link to="/" className="flex items-center gap-2">
-            <span className="text-xl font-heading font-bold">Fundify</span>
+            <img src="https://levcharity.dev/app/uploads/2024/04/favicon.svg" alt="levcharity logo" className="w-6 h-6" />
+            <span className="text-xl font-heading font-bold">levcharity</span>
           </Link>
         </div>
         <div className="px-3 py-4">
