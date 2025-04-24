@@ -9,7 +9,7 @@ export function useCampaigns() {
   const { toast } = useToast();
 
   // Create a new campaign
-  const createCampaign = async (campaignData: Campaign): Promise<Campaign | null> => {
+  const createCampaign = async (campaignData: Omit<Campaign, 'id' | 'created_at' | 'updated_at'>): Promise<Campaign | null> => {
     try {
       setLoading(true);
       
@@ -29,7 +29,8 @@ export function useCampaigns() {
             featured_image_url: featuredImageUrl || campaignData.featured_image_url,
           }
         ])
-        .select();
+        .select()
+        .single();
       
       if (error) {
         console.error('Error creating campaign:', error);
@@ -46,7 +47,7 @@ export function useCampaigns() {
         description: 'Your campaign has been created successfully.'
       });
       
-      return data[0] as Campaign;
+      return data;
     } catch (error) {
       console.error('Error creating campaign:', error);
       toast({
@@ -80,7 +81,7 @@ export function useCampaigns() {
         return [];
       }
       
-      return data as Campaign[];
+      return data || [];
     } catch (error) {
       console.error('Error fetching campaigns:', error);
       return [];
@@ -105,7 +106,7 @@ export function useCampaigns() {
         return null;
       }
       
-      return data as Campaign;
+      return data;
     } catch (error) {
       console.error('Error fetching campaign:', error);
       return null;

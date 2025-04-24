@@ -9,6 +9,66 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
+      campaigns: {
+        Row: {
+          banner_image_url: string | null
+          created_at: string | null
+          created_by: string
+          currency: string
+          end_date: string | null
+          featured_image_url: string | null
+          goal_amount: number | null
+          id: string
+          is_never_ending: boolean | null
+          is_unlimited_goal: boolean | null
+          message: string
+          name: string
+          start_date: string
+          status: string
+          subtitle: string | null
+          title: string
+          updated_at: string | null
+        }
+        Insert: {
+          banner_image_url?: string | null
+          created_at?: string | null
+          created_by: string
+          currency?: string
+          end_date?: string | null
+          featured_image_url?: string | null
+          goal_amount?: number | null
+          id?: string
+          is_never_ending?: boolean | null
+          is_unlimited_goal?: boolean | null
+          message: string
+          name: string
+          start_date?: string
+          status?: string
+          subtitle?: string | null
+          title: string
+          updated_at?: string | null
+        }
+        Update: {
+          banner_image_url?: string | null
+          created_at?: string | null
+          created_by?: string
+          currency?: string
+          end_date?: string | null
+          featured_image_url?: string | null
+          goal_amount?: number | null
+          id?: string
+          is_never_ending?: boolean | null
+          is_unlimited_goal?: boolean | null
+          message?: string
+          name?: string
+          start_date?: string
+          status?: string
+          subtitle?: string | null
+          title?: string
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
       useraccount: {
         Row: {
           created_at: string

@@ -15,5 +15,6 @@ export interface Campaign {
   featured_image_url?: string;
   created_by: string;
   created_at?: string;
+  updated_at?: string;
   status: 'draft' | 'active' | 'completed' | 'cancelled';
 }

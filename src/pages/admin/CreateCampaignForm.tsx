@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { AdminLayout } from "@/components/layout/AdminLayout";
@@ -16,6 +15,7 @@ import { CalendarIcon, Upload } from "lucide-react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useAuth } from "@/hooks/useAuth";
 import { useCampaigns } from "@/hooks/useCampaigns";
+import { Campaign } from "@/types/campaign";
 
 const CreateCampaignForm = () => {
   const { user } = useAuth();
@@ -44,7 +44,7 @@ const CreateCampaignForm = () => {
     }
     
     try {
-      const campaignData = {
+      const campaignData: Omit<Campaign, 'id' | 'created_at' | 'updated_at'> = {
         name: campaignName,
         title: campaignTitle,
         subtitle: campaignSubtitle,
