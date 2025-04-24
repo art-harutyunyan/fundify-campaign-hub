@@ -18,10 +18,9 @@ export function useIsAdmin(): boolean | null {
 
     let cancelled = false;
     
-    // Log to debug
     console.log("Checking admin status for user:", user.id, user.email);
     
-    // First let's try to query by email
+    // Query by user email
     supabase
       .from("userAccount")
       .select("is_admin")
@@ -32,12 +31,25 @@ export function useIsAdmin(): boolean | null {
         
         if (error) {
           console.error("Error checking admin status by email:", error);
+          setIsAdmin(false);
+          return;
+        }
+        
+        console.log("Admin status data from email lookup:", data);
+        
+        if (data) {
+          console.log("is_admin value:", data.is_admin, "type:", typeof data.is_admin);
+          // Cast to number and compare with 1
+          const adminValue = Number(data.is_admin);
+          console.log("adminValue after conversion:", adminValue, "isNaN:", isNaN(adminValue));
           
-          // If email lookup fails, try with lowercase email as a fallback
+          setIsAdmin(adminValue === 1);
+        } else {
+          console.log("No data found for email, trying lowercase email");
+          
+          // Try with lowercase email as fallback
           const lowercaseEmail = user.email?.toLowerCase();
           if (lowercaseEmail && lowercaseEmail !== user.email) {
-            console.log("Trying with lowercase email:", lowercaseEmail);
-            
             supabase
               .from("userAccount")
               .select("is_admin")
@@ -47,29 +59,22 @@ export function useIsAdmin(): boolean | null {
                 if (cancelled) return;
                 
                 if (lowercaseError) {
-                  console.error("Error checking admin status with lowercase email:", lowercaseError);
+                  console.error("Error with lowercase email:", lowercaseError);
                   setIsAdmin(false);
                   return;
                 }
                 
-                console.log("Admin status data (lowercase email):", lowercaseData);
-                setIsAdmin(!!lowercaseData && lowercaseData.is_admin === 1);
+                console.log("Lowercase email data:", lowercaseData);
+                if (lowercaseData) {
+                  const adminValue = Number(lowercaseData.is_admin);
+                  setIsAdmin(adminValue === 1);
+                } else {
+                  setIsAdmin(false);
+                }
               });
           } else {
             setIsAdmin(false);
           }
-          return;
-        }
-        
-        console.log("Admin status data from email lookup:", data);
-        
-        if (data) {
-          // Log the exact value and type of is_admin for debugging
-          console.log("is_admin value:", data.is_admin, "type:", typeof data.is_admin);
-          setIsAdmin(data.is_admin === 1);
-        } else {
-          console.log("No data found for email:", user.email);
-          setIsAdmin(false);
         }
       });
 
@@ -78,7 +83,6 @@ export function useIsAdmin(): boolean | null {
     };
   }, [user, loading]);
 
-  // Log the result value that we're returning
   console.log("useIsAdmin hook returning:", isAdmin);
   return isAdmin;
 }

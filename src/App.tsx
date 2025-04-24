@@ -11,9 +11,11 @@ import CampaignDetail from "./pages/CampaignDetail";
 import CampaignForm from "./pages/CampaignForm";
 import AdminDashboard from "./pages/admin/AdminDashboard";
 import AdminCampaigns from "./pages/admin/AdminCampaigns";
+import CreateCampaignForm from "./pages/admin/CreateCampaignForm";
 import Login from "./pages/auth/Login";
 import SignUp from "./pages/auth/SignUp";
 import ForgotPassword from "./pages/auth/ForgotPassword";
+import ProfilePage from "./pages/ProfilePage";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -36,10 +38,12 @@ const App = () => (
             <Route path="/login" element={<Login />} />
             <Route path="/signup" element={<SignUp />} />
             <Route path="/forgot-password" element={<ForgotPassword />} />
+            <Route path="/profile" element={<ProfilePage />} />
             
             {/* Admin Routes */}
             <Route path="/admin" element={<AdminDashboard />} />
             <Route path="/admin/campaigns" element={<AdminCampaigns />} />
+            <Route path="/admin/campaigns/create" element={<CreateCampaignForm />} />
             
             {/* Catch-all route */}
             <Route path="*" element={<NotFound />} />

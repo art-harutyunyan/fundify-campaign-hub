@@ -9,7 +9,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { UserCircle } from "lucide-react";
+import { UserCircle, Eye, EyeOff } from "lucide-react";
 import { useIsAdmin } from "@/hooks/useIsAdmin";
 
 export function MainNav() {
@@ -25,7 +25,8 @@ export function MainNav() {
       <div className="container flex h-16 items-center justify-between">
         <div className="flex items-center gap-6">
           <Link to="/" className="flex items-center gap-2">
-            <span className="text-xl font-heading font-bold">Fundify</span>
+            <img src="https://levcharity.dev/app/uploads/2024/04/favicon.svg" alt="levcharity logo" className="w-6 h-6" />
+            <span className="text-xl font-heading font-bold">levcharity</span>
           </Link>
           <nav className="hidden md:flex items-center gap-6">
             <Link to="/campaigns" className="text-sm font-medium hover:text-primary">
@@ -46,7 +47,7 @@ export function MainNav() {
                 <DropdownMenuTrigger asChild>
                   <Button variant="outline" size="sm" className="rounded-full">
                     <UserCircle className="h-5 w-5 mr-2" />
-                    <span className="max-w-[100px] truncate">
+                    <span className="max-w-[150px] truncate">
                       {user.user_metadata?.full_name || user.email}
                     </span>
                   </Button>
@@ -54,9 +55,6 @@ export function MainNav() {
                 <DropdownMenuContent align="end">
                   <DropdownMenuItem asChild>
                     <Link to="/profile">My Profile</Link>
-                  </DropdownMenuItem>
-                  <DropdownMenuItem asChild>
-                    <Link to="/donations">My Donations</Link>
                   </DropdownMenuItem>
                   <DropdownMenuSeparator />
                   <DropdownMenuItem
